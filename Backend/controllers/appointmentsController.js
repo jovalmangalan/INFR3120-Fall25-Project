@@ -53,6 +53,39 @@ export default {
         res.render("calendar", { appts });
     },
 
+    showEditPage(req, res) {
+        const { id } = req.params;
+        const appts = loadAppointments();
+
+        const appt = appts.find(a => a.id === id);
+        if (!appt) return res.send("Appointment not found");
+
+        res.render("edit", { appt });
+    },
+
+    updateAppointment(req, res) {
+        const { id } = req.params;
+        const { patient, doctor, datetime } = req.body;
+
+        let appts = loadAppointments();
+        const index = appts.findIndex(a => a.id === id);
+
+        if (index === -1) return res.send("Appointment not found");
+
+        // check for conflict
+        const conflict = appts.find(
+            (a) => a.doctor === doctor && a.datetime === datetime && a.id !== id
+        );
+        if (conflict) {
+            return res.send("This time slot is already taken.");
+        }
+
+        appts[index] = { id, patient, doctor, datetime };
+        saveAppointments(appts);
+
+        res.redirect("/calendar");
+    },
+
     deleteAppointment(req, res) {
         const { id } = req.params;
         let appts = loadAppointments();
