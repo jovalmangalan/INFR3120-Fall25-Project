@@ -35,6 +35,7 @@ Malik Khan
 - Created UI styling and color theme
 - Added branding and layout improvements
 
+```
 Project Structure
 INFR3120-Fall25-Project
 │   package.json
@@ -54,6 +55,7 @@ INFR3120-Fall25-Project
     schedule.ejs
     calendar.ejs
     edit.ejs
+```
 
 How to Run Locally
 1. git clone https://github.com/jovalmangalan/INFR3120-Fall25-Project
