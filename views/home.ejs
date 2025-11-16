@@ -8,10 +8,38 @@
 
     <h1>Healthcare Appointment System</h1>
 
+    <!-- Navigation buttons -->
     <div class="nav">
         <a href="/schedule">Schedule Appointment</a>
         <a href="/calendar">View Calendar</a>
     </div>
+
+    <!-- Upcoming Appointments Table -->
+    <h2>Upcoming Appointments</h2>
+
+    <table>
+        <tr>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Date & Time</th>
+            <th>Action</th>
+        </tr>
+
+        <% if (appts.length === 0) { %>
+            <tr>
+                <td colspan="4">No appointments yet</td>
+            </tr>
+        <% } %>
+
+        <% appts.forEach(a => { %>
+            <tr>
+                <td><%= a.patient %></td>
+                <td><%= a.doctor %></td>
+                <td><%= a.datetime %></td>
+                <td><a class="delete" href="/delete/<%= a.id %>">Delete</a></td>
+            </tr>
+        <% }) %>
+    </table>
 
 </body>
 </html>

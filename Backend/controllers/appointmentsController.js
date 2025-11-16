@@ -14,7 +14,8 @@ function saveAppointments(data) {
 
 export default {
     showHome(req, res) {
-        res.render("home");
+    const appts = loadAppointments(); 
+    res.render("home", { appts });
     },
 
     showSchedulePage(req, res) {
