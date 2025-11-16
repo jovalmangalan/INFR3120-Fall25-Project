@@ -1,4 +1,6 @@
-/* General Layout */
+/* ============================
+   GENERAL LAYOUT
+============================ */
 
 body {
     font-family: Arial, sans-serif;
@@ -14,15 +16,27 @@ h1, h2 {
     color: #222;
 }
 
-/* Navigation Buttons */
+/* ============================
+   LOGO
+============================ */
+
+.logo {
+    width: 180px;
+    display: block;
+    margin: 0 auto 20px auto;
+}
+
+/* ============================
+   NAVIGATION BUTTONS
+============================ */
 
 .nav {
-    text-align: center;   /* centers the two buttons */
+    text-align: center;
     margin-top: 20px;
 }
 
 .nav a {
-    display: inline-block;    /* makes them behave like buttons */
+    display: inline-block;
     margin: 0 10px;
     padding: 12px 20px;
     background: #0066ff;
@@ -36,12 +50,13 @@ h1, h2 {
     background: #004bcc;
 }
 
-/* TABLE (used on home + calendar) */
-
+/* ============================
+   TABLE STYLING
+============================ */
 
 table {
     width: 80%;
-    margin: 40px auto;       /* centers table */
+    margin: 40px auto;
     border-collapse: collapse;
     background: white;
     box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
@@ -58,23 +73,39 @@ th {
     color: white;
 }
 
+/* ============================
+   ACTION BUTTONS: EDIT / DELETE
+============================ */
 
-/* DELETE Button */
-
-
-a.delete {
-    color: red;
+.action-links a {
+    display: inline-block !important;
+    margin: 0 10px;
     font-weight: bold;
     text-decoration: none;
 }
 
-a.delete:hover {
+.edit {
+    color: #008800;
+}
+
+.edit:hover {
     text-decoration: underline;
 }
 
+.delete {
+    color: #cc0000;
+}
 
+.delete:hover {
+    text-decoration: underline;
+}
 
-a {
+/* ============================
+   GLOBAL ANCHOR FIX
+   (Only applies to BACK buttons)
+============================ */
+
+body > a {
     display: block;
     text-align: center;
     margin-top: 30px;
@@ -83,6 +114,6 @@ a {
     color: #0066ff;
 }
 
-a:hover {
+body > a:hover {
     text-decoration: underline;
 }
