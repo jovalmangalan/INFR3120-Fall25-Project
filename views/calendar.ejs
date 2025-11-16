@@ -6,6 +6,8 @@
 </head>
 <body>
 
+    <img src="/logo.png" alt="Logo" class="logo">
+
     <h1>Calendar</h1>
 
     <table>
@@ -21,10 +23,14 @@
             <td><%= a.patient %></td>
             <td><%= a.doctor %></td>
             <td><%= a.datetime %></td>
-            <td><a class="delete" href="/delete/<%= a.id %>">Delete</a></td>
-        </tr>
-        <% }) %>
 
+            <td class="action-links">
+                <a href="/edit/<%= a.id %>" class="edit">Edit</a>
+                <a href="/delete/<%= a.id %>" class="delete">Delete</a>
+            </td>
+        </tr>
+
+        <% }) %>
     </table>
 
     <a href="/">Back to Home</a>

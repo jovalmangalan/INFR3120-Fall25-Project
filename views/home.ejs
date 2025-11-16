@@ -6,15 +6,15 @@
 </head>
 <body>
 
+    <img src="/logo.png" alt="Logo" class="logo">
+
     <h1>Healthcare Appointment System</h1>
 
-    <!-- Navigation buttons -->
     <div class="nav">
         <a href="/schedule">Schedule Appointment</a>
         <a href="/calendar">View Calendar</a>
     </div>
 
-    <!-- Upcoming Appointments Table -->
     <h2>Upcoming Appointments</h2>
 
     <table>
@@ -36,7 +36,11 @@
                 <td><%= a.patient %></td>
                 <td><%= a.doctor %></td>
                 <td><%= a.datetime %></td>
-                <td><a class="delete" href="/delete/<%= a.id %>">Delete</a></td>
+
+                <td class="action-links">
+                    <a href="/edit/<%= a.id %>" class="edit">Edit</a>
+                    <a href="/delete/<%= a.id %>" class="delete">Delete</a>
+                </td>
             </tr>
         <% }) %>
     </table>
