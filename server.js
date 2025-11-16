@@ -1,6 +1,6 @@
 import express from "express";
 import path from "path";
-import appointmentsRouter from "./backend/routes/appointments.js";
+import appointmentsRouter from "./Backend/routes/appointments.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
