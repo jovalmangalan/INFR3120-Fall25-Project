@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import appointmentsRouter from "./backend/routes/appointments.js";
+import appointmentsRouter from "./Backend/routes/appointments.js";
 
 dotenv.config();
 
