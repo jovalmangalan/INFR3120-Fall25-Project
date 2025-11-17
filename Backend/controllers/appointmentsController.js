@@ -1,99 +1,71 @@
-import fs from "fs";
-import path from "path";
-
-const filePath = path.join(process.cwd(), "data", "appointments.json");
-
-function loadAppointments() {
-    const data = fs.readFileSync(filePath);
-    return JSON.parse(data);
-}
-
-function saveAppointments(data) {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
+import Booking from "../models/bookingModel.js";
 
 export default {
-    showHome(req, res) {
-    const appts = loadAppointments(); 
-    res.render("home", { appts });
+    // HOME PAGE – list upcoming appointments
+    async showHome(req, res) {
+        const appts = await Booking.find().sort({ datetime: 1 });
+        res.render("home", { appts });
     },
 
+    // SCHEDULE PAGE
     showSchedulePage(req, res) {
         res.render("schedule");
     },
 
-    createAppointment(req, res) {
+    // CREATE NEW APPOINTMENT
+    async createAppointment(req, res) {
         const { patient, doctor, datetime } = req.body;
 
-        const appts = loadAppointments();
-
-        // double-booking check
-        const conflict = appts.find(
-            (a) => a.doctor === doctor && a.datetime === datetime
-        );
-
+        // check for double booking
+        const conflict = await Booking.findOne({ doctor, datetime });
         if (conflict) {
             return res.send("This time slot is already taken.");
         }
 
-        const newAppt = {
-            id: Date.now().toString(),
-            patient,
-            doctor,
-            datetime
-        };
-
-        appts.push(newAppt);
-        saveAppointments(appts);
-
+        await Booking.create({ patient, doctor, datetime });
         res.redirect("/calendar");
     },
 
-    showCalendar(req, res) {
-        const appts = loadAppointments();
+    // CALENDAR PAGE
+    async showCalendar(req, res) {
+        const appts = await Booking.find().sort({ datetime: 1 });
         res.render("calendar", { appts });
     },
 
-    showEditPage(req, res) {
+    // EDIT PAGE
+    async showEditPage(req, res) {
         const { id } = req.params;
-        const appts = loadAppointments();
+        const appt = await Booking.findById(id);
 
-        const appt = appts.find(a => a.id === id);
         if (!appt) return res.send("Appointment not found");
 
         res.render("edit", { appt });
     },
 
-    updateAppointment(req, res) {
+    // UPDATE APPOINTMENT
+    async updateAppointment(req, res) {
         const { id } = req.params;
         const { patient, doctor, datetime } = req.body;
 
-        let appts = loadAppointments();
-        const index = appts.findIndex(a => a.id === id);
+        // prevent double booking (ignore current appointment)
+        const conflict = await Booking.findOne({
+            doctor,
+            datetime,
+            _id: { $ne: id }
+        });
 
-        if (index === -1) return res.send("Appointment not found");
-
-        // check for conflict
-        const conflict = appts.find(
-            (a) => a.doctor === doctor && a.datetime === datetime && a.id !== id
-        );
         if (conflict) {
             return res.send("This time slot is already taken.");
         }
 
-        appts[index] = { id, patient, doctor, datetime };
-        saveAppointments(appts);
-
+        await Booking.findByIdAndUpdate(id, { patient, doctor, datetime });
         res.redirect("/calendar");
     },
 
-    deleteAppointment(req, res) {
+    // DELETE APPOINTMENT
+    async deleteAppointment(req, res) {
         const { id } = req.params;
-        let appts = loadAppointments();
-
-        appts = appts.filter(a => a.id !== id);
-        saveAppointments(appts);
-
+        await Booking.findByIdAndDelete(id);
         res.redirect("/calendar");
     }
 };
