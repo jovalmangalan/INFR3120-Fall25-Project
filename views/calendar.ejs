@@ -8,6 +8,16 @@
 
     <img src="/logo.png" alt="Logo" class="logo">
 
+    <div class="nav">
+        <a href="/">Home</a>
+
+        <% if (!session.userId) { %>
+            <a href="/login">Login</a>
+        <% } else { %>
+            <a href="/logout">Logout</a>
+        <% } %>
+    </div>
+
     <h1>Calendar</h1>
 
     <table>
@@ -32,8 +42,6 @@
 
         <% }) %>
     </table>
-
-    <a href="/">Back to Home</a>
 
 </body>
 </html>

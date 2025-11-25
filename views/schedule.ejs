@@ -8,6 +8,17 @@
 
     <img src="/logo.png" alt="Logo" class="logo">
 
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/calendar">View Calendar</a>
+
+        <% if (!session.userId) { %>
+            <a href="/login">Login</a>
+        <% } else { %>
+            <a href="/logout">Logout</a>
+        <% } %>
+    </div>
+
     <h1>Schedule an Appointment</h1>
 
     <form action="/schedule" method="POST">
@@ -22,8 +33,6 @@
 
         <button type="submit">Submit</button>
     </form>
-
-    <a href="/">Back to Home</a>
 
 </body>
 </html>
