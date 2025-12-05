@@ -15,6 +15,24 @@
             <input type="email" name="email" placeholder="Email" required>
             <input type="password" name="password" placeholder="Password" required>
 
+            <!-- 🔐 Security Question -->
+            <label for="securityQuestion">Security Question</label>
+            <select name="securityQuestion" id="securityQuestion" required>
+                <option value="">Select a security question</option>
+                <option value="What is your favourite colour?">What is your favourite colour?</option>
+                <option value="Which neighbourhood did you grow up in?">Which neighbourhood did you grow up in?</option>
+                <option value="What is a nickname you've been given?">What is a nickname you've been given?</option>
+            </select>
+
+            <label for="securityAnswer">Your Answer</label>
+            <input
+                type="text"
+                id="securityAnswer"
+                name="securityAnswer"
+                placeholder="Answer to your security question"
+                required
+            >
+
             <button type="submit">Register</button>
         </form>
 
@@ -24,4 +42,3 @@
 
 </body>
 </html>
->>>>>>> 7939e4781963b274ecda6927cfe56a87b4a4f227

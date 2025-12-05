@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verify Security Question</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <img src="/logo.png" alt="Logo" class="logo">
+    <h1>Security Verification</h1>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <p><strong>Security Question:</strong> <%= securityQuestion %></p>
+
+    <form action="/reset-password" method="POST">
+      <!-- keep email hidden so backend knows which user -->
+      <input type="hidden" name="email" value="<%= email %>">
+
+      <label for="securityAnswer">Your Answer</label>
+      <input type="text" id="securityAnswer" name="securityAnswer" required>
+
+      <label for="newPassword">New Password</label>
+      <input type="password" id="newPassword" name="newPassword" required>
+
+      <button type="submit">Reset Password</button>
+    </form>
+
+    <a class="small-link" href="/login">Back to Login</a>
+    <a class="small-link" href="/">Back to Home</a>
+  </div>
+
+</body>
+</html>
