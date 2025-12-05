@@ -80,7 +80,7 @@ router.get("/logout", (req, res) => {
 });
 
 // =============================
-//  FORGOT PASSWORD (STEP 1) – enter email
+//  FORGOT PASSWORD
 // =============================
 
 router.get("/forgot-password", (req, res) => {
@@ -96,7 +96,6 @@ router.post("/forgot-password", async (req, res) => {
       return res.send("No user found with that email.");
     }
 
-    // render page to answer security question + choose new password
     res.render("answerSecurity", {
       email: user.email,
       securityQuestion: user.securityQuestion,
@@ -108,7 +107,7 @@ router.post("/forgot-password", async (req, res) => {
 });
 
 // =============================
-//  RESET PASSWORD (STEP 2) – check answer + set new password
+//  RESET PASSWORD
 // =============================
 
 router.post("/reset-password", async (req, res) => {
@@ -134,8 +133,6 @@ router.post("/reset-password", async (req, res) => {
 
     user.password = await bcrypt.hash(newPassword, 10);
     await user.save();
-
-    // 👇 instead of plain res.send, render login nicely
     return res.render("login", {
       message: "Password updated successfully. Please log in.",
       error: null,
@@ -145,8 +142,6 @@ router.post("/reset-password", async (req, res) => {
     res.status(500).send("Error resetting password.");
   }
 });
-
-// VERY IMPORTANT: default export expected by server.js
 export default router;
 
 

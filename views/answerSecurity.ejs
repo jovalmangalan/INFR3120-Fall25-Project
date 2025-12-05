@@ -17,7 +17,6 @@
     <p><strong>Security Question:</strong> <%= securityQuestion %></p>
 
     <form action="/reset-password" method="POST">
-      <!-- keep email hidden so backend knows which user -->
       <input type="hidden" name="email" value="<%= email %>">
 
       <label for="securityAnswer">Your Answer</label>

@@ -74,14 +74,9 @@ app.use(express.static("public"));
 app.use("/", authRoutes);          // login / register / logout
 app.use("/", appointmentsRouter);  // home / schedule / calendar / edit / delete
 
-// Optional: simple 404
-app.use((req, res) => {
-  res.status(404).send("Page not found");
-});
-
 // =============================
 //  Start server
 // =============================
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
