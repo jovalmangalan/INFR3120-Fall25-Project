@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import path from "path";
 import mongoose from "mongoose";
@@ -8,8 +7,10 @@ import MongoStore from "connect-mongo";
 
 import appointmentsRouter from "./Backend/routes/appointments.js";
 import authRoutes from "./Backend/routes/auth.js";
+import profileRoutes from "./Backend/routes/profile.js";
 
-// Load environment variables from .env
+import User from "./Backend/models/userModel.js";
+
 dotenv.config();
 
 const app = express();
@@ -17,66 +18,80 @@ const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
 
 // =============================
-//  MongoDB connection
+//  MongoDB Connection
 // =============================
-if (!MONGO_URI) {
-  console.error("❌ MONGO_URI is not defined in .env");
-} else {
-  mongoose
-    .connect(MONGO_URI)
-    .then(() => console.log("✅ Connected to MongoDB Atlas"))
-    .catch((err) => console.error("MongoDB Error:", err));
-}
+mongoose
+  .connect(MONGO_URI)
+  .then(() => console.log("✅ Connected to MongoDB Atlas"))
+  .catch((err) => console.error("MongoDB Error:", err));
 
 // =============================
 //  Middleware
 // =============================
-
-// Body parsers
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Sessions
-const sessionOptions = {
-  secret: process.env.SESSION_SECRET || "superSecretKey",
-  resave: false,
-  saveUninitialized: false,
-};
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "superSecret",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: MONGO_URI,
+    }),
+  })
+);
 
-if (MONGO_URI) {
-  sessionOptions.store = MongoStore.create({
-    mongoUrl: MONGO_URI,
-  });
-  console.log("✅ Using MongoStore for sessions");
-} else {
-  console.warn("⚠️ MONGO_URI missing – using in-memory session store");
-}
-
-app.use(session(sessionOptions));
-
-// Make session available in all EJS views
-app.use((req, res, next) => {
-  res.locals.session = req.session;
+// Make session + logged-in user available everywhere
+app.use(async (req, res, next) => {
+  if (req.session.userId) {
+    try {
+      const user = await User.findById(req.session.userId);
+      req.user = user;
+      res.locals.user = user;
+    } catch (err) {
+      console.error(err);
+      req.user = null;
+      res.locals.user = null;
+    }
+  } else {
+    req.user = null;
+    res.locals.user = null;
+  }
   next();
 });
 
 // =============================
-//  View engine & static files
+//  Serve Profile Images
+// =============================
+app.get("/profile/image", async (req, res) => {
+  if (!req.session.userId) return res.status(404).send("No image");
+
+  const user = await User.findById(req.session.userId);
+
+  if (!user || !user.profileImage || !user.profileImage.data)
+    return res.status(404).send("No image");
+
+  res.contentType(user.profileImage.contentType);
+  res.send(user.profileImage.data);
+});
+
+// =============================
+//  View Engine / Static Files
 // =============================
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "views"));
-
 app.use(express.static("public"));
 
 // =============================
 //  Routes
 // =============================
-app.use("/", authRoutes);          // login / register / logout
-app.use("/", appointmentsRouter);  // home / schedule / calendar / edit / delete
+app.use("/", authRoutes);
+app.use("/", appointmentsRouter);
+app.use("/profile", profileRoutes);
 
 // =============================
-//  Start server
+//  Start Server
 // =============================
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

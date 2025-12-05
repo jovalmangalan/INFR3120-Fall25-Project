@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Profile</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Your Profile</h1>
+
+    <h3>Current Profile Image</h3>
+
+    <% if (user && user.profileImage && user.profileImage.data) { %>
+        <img src="/profile/image" class="profile-img">
+    <% } else { %>
+        <p>No profile image uploaded yet.</p>
+    <% } %>
+
+    <form action="/profile/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="profileImage" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <a href="/" class="small-link">Back to Home</a>
+</div>
+
+</body>
+</html>

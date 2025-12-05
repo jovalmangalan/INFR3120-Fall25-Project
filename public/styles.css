@@ -1,7 +1,6 @@
 /* ============================
    GENERAL LAYOUT
 ============================ */
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -30,73 +29,37 @@ h1, h2 {
 }
 
 /* ============================
-   HOME PAGE LAYOUT
+   NAVIGATION
 ============================ */
-
-.home-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 80px;
-    width: 100%;
-    padding: 40px 0;
-}
-
-.home-left {
+.nav {
     text-align: center;
-    width: 350px;
-}
-
-.home-title {
-    font-size: 36px;
-    font-weight: bold;
-    line-height: 1.2;
-    margin: 20px 0;
-}
-
-.home-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
     margin-top: 20px;
 }
 
-.btn {
-    padding: 14px 20px;
+.nav a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 12px 20px;
     background: #0066ff;
     color: white;
-    border-radius: 8px;
     text-decoration: none;
-    font-size: 18px;
+    border-radius: 8px;
     font-weight: bold;
-    text-align: center;
 }
 
-.btn:hover {
+.nav a:hover {
     background: #004bcc;
 }
 
-.home-right {
-    width: 550px;
-}
-
-/* Card around upcoming appointments table */
-.table-card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 14px rgba(0,0,0,0.1);
-}
-
-
 /* ============================
-   TABLE STYLING (Calendar & Home)
+   TABLES
 ============================ */
-
 table {
-    width: 100%;
+    width: 80%;
+    margin: 40px auto;
     border-collapse: collapse;
     background: white;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
 }
 
 th, td {
@@ -108,21 +71,18 @@ th, td {
 th {
     background: #0066ff;
     color: white;
-    font-size: 16px;
 }
 
-/* Edit/Delete Buttons */
+/* Edit/Delete buttons */
 .action-links a {
     margin: 0 8px;
     font-weight: bold;
     text-decoration: none;
-    cursor: pointer;
 }
 
 .edit {
     color: #008800;
 }
-
 .edit:hover {
     text-decoration: underline;
 }
@@ -130,16 +90,13 @@ th {
 .delete {
     color: #cc0000;
 }
-
 .delete:hover {
     text-decoration: underline;
 }
 
-
 /* ============================
-   CARD LAYOUT FOR LOGIN / REGISTER / FORMS
+   FORM CARDS
 ============================ */
-
 .container {
     background: white;
     padding: 30px;
@@ -188,36 +145,30 @@ button:hover {
     text-decoration: underline;
 }
 
+/* ============================
+   PROFILE IMAGES
+============================ */
+.avatar-small {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: block;
+    margin: 15px auto;
+    border: 2px solid #0066ff;
+}
+
+.profile-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 10px;
+    display: block;
+    margin: 20px auto;
+    border: 2px solid #0066ff;
+}
 
 /* ============================
-   NAVIGATION BUTTONS (if used)
+   BACK LINKS
 ============================ */
-
-.nav {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.nav a {
-    display: inline-block;
-    margin: 0 10px;
-    padding: 12px 20px;
-    background: #0066ff;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-.nav a:hover {
-    background: #004bcc;
-}
-
-
-/* ============================
-   GLOBAL BACK LINKS
-============================ */
-
 body > a {
     display: block;
     text-align: center;
