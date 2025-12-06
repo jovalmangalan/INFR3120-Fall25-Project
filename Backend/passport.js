@@ -6,58 +6,126 @@ import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { Strategy as GitHubStrategy } from "passport-github2";
 import { Strategy as DiscordStrategy } from "passport-discord";
 
-import User from "./models/userModel.js";
+import User from "../Backend/models/userModel.js";
 
-// serialize/deserialize
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((obj, done) => done(null, obj));
+/* =========================================
+   SESSION HANDLING
+========================================= */
 
+// Store only user ID in session
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
 
-// GOOGLE
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/auth/google/callback",
-    },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+// Retrieve full user from DB based on stored ID
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err, null);
     }
-  )
-);
+});
 
+/* =========================================
+   GOOGLE STRATEGY
+========================================= */
 
-// GITHUB
-passport.use(
-  new GitHubStrategy(
+passport.use(new GoogleStrategy(
     {
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "/auth/github/callback",
-      scope: ["user:email"],
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL
     },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
+    async (accessToken, refreshToken, profile, done) => {
+        try {
+            let user = await User.findOne({
+                oauthId: profile.id,
+                authProvider: "google",
+            });
+
+            if (!user) {
+                user = await User.create({
+                    name: profile.displayName,
+                    email: profile.emails?.[0]?.value || null,
+                    oauthId: profile.id,
+                    authProvider: "google",
+                });
+            }
+
+            return done(null, user);
+        } catch (err) {
+            return done(err, null);
+        }
     }
-  )
-);
+));
 
+/* =========================================
+   GITHUB STRATEGY
+========================================= */
 
-// DISCORD
-passport.use(
-  new DiscordStrategy(
+passport.use(new GitHubStrategy(
     {
-      clientID: process.env.DISCORD_CLIENT_ID,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      callbackURL: "/auth/discord/callback",
-      scope: ["identify", "email"],
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: process.env.GITHUB_CALLBACK_URL,
+        scope: ["user:email"],
     },
-    (accessToken, refreshToken, profile, done) => {
-      return done(null, profile);
-    }
-  )
-);
+    async (accessToken, refreshToken, profile, done) => {
+        try {
+            let user = await User.findOne({
+                oauthId: profile.id,
+                authProvider: "github"
+            });
 
+            if (!user) {
+                user = await User.create({
+                    name: profile.displayName || profile.username,
+                    email: profile.emails?.[0]?.value || null,
+                    oauthId: profile.id,
+                    authProvider: "github",
+                });
+            }
+
+            return done(null, user);
+        } catch (err) {
+            return done(err, null);
+        }
+    }
+));
+
+/* =========================================
+   DISCORD STRATEGY
+========================================= */
+
+passport.use(new DiscordStrategy(
+    {
+        clientID: process.env.DISCORD_CLIENT_ID,
+        clientSecret: process.env.DISCORD_CLIENT_SECRET,
+        callbackURL: process.env.DISCORD_CALLBACK_URL,
+        scope: ["identify", "email"],
+    },
+    async (accessToken, refreshToken, profile, done) => {
+        try {
+            let user = await User.findOne({
+                oauthId: profile.id,
+                authProvider: "discord",
+            });
+
+            if (!user) {
+                user = await User.create({
+                    name: profile.username,
+                    email: profile.email || null,
+                    oauthId: profile.id,
+                    authProvider: "discord",
+                });
+            }
+
+            return done(null, user);
+        } catch (err) {
+            return done(err, null);
+        }
+    }
+));
 
 export default passport;
