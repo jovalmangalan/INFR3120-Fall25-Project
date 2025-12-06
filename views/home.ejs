@@ -6,17 +6,14 @@
 </head>
 <body>
 
-    <!-- Show profile image ONLY when logged in -->
     <% if (user) { %>
         <img src="/profile/image" class="avatar-small" alt="Profile Image">
     <% } %>
 
     <img src="/logo.png" alt="Logo" class="logo">
-
     <h1>Healthcare Appointment System</h1>
 
     <div class="nav">
-
         <a href="/schedule">Schedule Appointment</a>
         <a href="/calendar">View Calendar</a>
 
@@ -26,7 +23,6 @@
             <a href="/profile">Profile</a>
             <a href="/logout">Logout</a>
         <% } %>
-
     </div>
 
     <h2>Upcoming Appointments</h2>
@@ -47,7 +43,30 @@
         <tr>
             <td><%= a.patient %></td>
             <td><%= a.doctor %></td>
-            <td><%= a.datetime %></td>
+
+            <td>
+                <% 
+                    const d = new Date(a.datetime);
+
+                    if (!isNaN(d)) {
+                        const yyyy = d.getFullYear();
+                        const mm = String(d.getMonth() + 1).padStart(2, "0");
+                        const dd = String(d.getDate()).padStart(2, "0");
+
+                        let hours = d.getHours();
+                        const minutes = String(d.getMinutes()).padStart(2, "0");
+                        const ampm = hours >= 12 ? "PM" : "AM";
+                        hours = hours % 12;
+                        hours = hours ? hours : 12;
+                %>
+
+                <%= `${yyyy}-${mm}-${dd} ${hours}:${minutes} ${ampm}` %>
+
+                <% } else { %>
+                    <%= a.datetime %>
+                <% } %>
+            </td>
+
             <td class="action-links">
                 <a href="/edit/<%= a.id %>" class="edit">Edit</a>
                 <a href="/delete/<%= a.id %>" class="delete">Delete</a>

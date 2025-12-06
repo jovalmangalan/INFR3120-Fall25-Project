@@ -18,16 +18,36 @@
         </tr>
 
         <% if (appts.length === 0) { %>
-            <tr>
-                <td colspan="4">No appointments scheduled</td>
-            </tr>
+            <tr><td colspan="4">No appointments scheduled</td></tr>
         <% } %>
 
         <% appts.forEach(a => { %>
         <tr>
             <td><%= a.patient %></td>
             <td><%= a.doctor %></td>
-            <td><%= a.datetime %></td>
+
+            <td>
+                <% 
+                    const d = new Date(a.datetime);
+
+                    if (!isNaN(d)) {
+                        const yyyy = d.getFullYear();
+                        const mm = String(d.getMonth() + 1).padStart(2, "0");
+                        const dd = String(d.getDate()).padStart(2, "0");
+
+                        let hours = d.getHours();
+                        const minutes = String(d.getMinutes()).padStart(2, "0");
+                        const ampm = hours >= 12 ? "PM" : "AM";
+                        hours = hours % 12;
+                        hours = hours ? hours : 12;
+                %>
+
+                <%= `${yyyy}-${mm}-${dd} ${hours}:${minutes} ${ampm}` %>
+
+                <% } else { %>
+                    <%= a.datetime %>
+                <% } %>
+            </td>
 
             <td class="action-links">
                 <a href="/edit/<%= a.id %>" class="edit">Edit</a>
