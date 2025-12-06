@@ -1,57 +1,63 @@
+import dotenv from "dotenv";
+dotenv.config(); 
 import express from "express";
 import path from "path";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import session from "express-session";
 import MongoStore from "connect-mongo";
-
+import passport from "passport";
+import "./Backend/passport.js";
 import appointmentsRouter from "./Backend/routes/appointments.js";
 import authRoutes from "./Backend/routes/auth.js";
-import profileRoutes from "./Backend/routes/profile.js";
-
+import oauthRoutes from "./Backend/routes/oauthroutes.js";
+import profileRoutes from "./Backend/routes/profileRoutes.js";
 import User from "./Backend/models/userModel.js";
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
 
-// =============================
-//  MongoDB Connection
-// =============================
-mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log("✅ Connected to MongoDB Atlas"))
-  .catch((err) => console.error("MongoDB Error:", err));
+// ===============================
+// DATABASE
+// ===============================
+mongoose.connect(MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch(err => console.error("Mongo Error:", err));
 
-// =============================
-//  Middleware
-// =============================
+// ===============================
+// BODY PARSING
+// ===============================
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Sessions
+// ===============================
+// SESSION
+// ===============================
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "superSecret",
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: MONGO_URI,
-    }),
+    store: MongoStore.create({ mongoUrl: MONGO_URI }),
   })
 );
 
-// Make session + logged-in user available everywhere
+// ===============================
+// PASSPORT
+// ===============================
+app.use(passport.initialize());
+app.use(passport.session());
+
+// ===============================
+// LOAD USER INTO EJS
+// ===============================
 app.use(async (req, res, next) => {
   if (req.session.userId) {
     try {
       const user = await User.findById(req.session.userId);
       req.user = user;
       res.locals.user = user;
-    } catch (err) {
-      console.error(err);
+    } catch {
       req.user = null;
       res.locals.user = null;
     }
@@ -62,36 +68,35 @@ app.use(async (req, res, next) => {
   next();
 });
 
-// =============================
-//  Serve Profile Images
-// =============================
+// ===============================
+// SERVE PROFILE IMAGES
+// ===============================
 app.get("/profile/image", async (req, res) => {
   if (!req.session.userId) return res.status(404).send("No image");
 
   const user = await User.findById(req.session.userId);
-
-  if (!user || !user.profileImage || !user.profileImage.data)
-    return res.status(404).send("No image");
+  if (!user?.profileImage?.data) return res.status(404).send("No image");
 
   res.contentType(user.profileImage.contentType);
   res.send(user.profileImage.data);
 });
 
-// =============================
-//  View Engine / Static Files
-// =============================
+// ===============================
+// STATIC FILES + VIEW ENGINE
+// ===============================
 app.set("view engine", "ejs");
 app.set("views", path.join(process.cwd(), "views"));
 app.use(express.static("public"));
 
-// =============================
-//  Routes
-// =============================
+// ===============================
+// ROUTES
+// ===============================
 app.use("/", authRoutes);
 app.use("/", appointmentsRouter);
+app.use("/auth", oauthRoutes);   // Google/GitHub/Discord OAuth
 app.use("/profile", profileRoutes);
 
-// =============================
-//  Start Server
-// =============================
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// ===============================
+// START SERVER
+// ===============================
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

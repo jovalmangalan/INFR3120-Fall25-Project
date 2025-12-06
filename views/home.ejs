@@ -6,7 +6,6 @@
 </head>
 <body>
 
-    <!-- Show profile image when logged in -->
     <% if (user) { %>
         <img src="/profile/image" class="avatar-small" alt="Profile Image">
     <% } %>
@@ -25,7 +24,6 @@
             <a href="/profile">Profile</a>
             <a href="/logout">Logout</a>
         <% } %>
-
     </div>
 
     <h2>Upcoming Appointments</h2>
@@ -39,9 +37,7 @@
         </tr>
 
         <% if (appts.length === 0) { %>
-            <tr>
-                <td colspan="4">No appointments yet</td>
-            </tr>
+            <tr><td colspan="4">No appointments yet</td></tr>
         <% } %>
 
         <% appts.forEach(a => { %>

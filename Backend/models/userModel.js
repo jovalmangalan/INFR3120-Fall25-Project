@@ -1,17 +1,25 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  name: { type: String },
+  email: { type: String, unique: true },
 
-  securityQuestion: { type: String, required: true },
-  securityAnswerHash: { type: String, required: true },
+  // Password NOT required for OAuth users
+  password: { type: String, required: false },
+
+  // Local-auth only
+  securityQuestion: { type: String, required: false },
+  securityAnswerHash: { type: String, required: false },
+
+  // Profile image stored in MongoDB
   profileImage: {
     data: Buffer,
     contentType: String,
   },
+
+  // OAuth fields
+  authProvider: { type: String, default: "local" },
+  oauthId: { type: String, default: null },
 });
 
-const User = mongoose.model("User", userSchema);
-export default User;
+export default mongoose.model("User", userSchema);

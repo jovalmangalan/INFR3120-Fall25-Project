@@ -1,6 +1,7 @@
 /* ============================
    GENERAL LAYOUT
 ============================ */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -13,6 +14,7 @@ body {
 /* ============================
    LOGO
 ============================ */
+
 .logo {
     width: 140px;
     display: block;
@@ -22,6 +24,7 @@ body {
 /* ============================
    HEADERS
 ============================ */
+
 h1, h2 {
     text-align: center;
     color: #222;
@@ -29,37 +32,72 @@ h1, h2 {
 }
 
 /* ============================
-   NAVIGATION
+   HOME PAGE LAYOUT
 ============================ */
-.nav {
+
+.home-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 80px;
+    width: 100%;
+    padding: 40px 0;
+}
+
+.home-left {
     text-align: center;
+    width: 350px;
+}
+
+.home-title {
+    font-size: 36px;
+    font-weight: bold;
+    line-height: 1.2;
+    margin: 20px 0;
+}
+
+.home-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     margin-top: 20px;
 }
 
-.nav a {
-    display: inline-block;
-    margin: 0 10px;
-    padding: 12px 20px;
+.btn {
+    padding: 14px 20px;
     background: #0066ff;
     color: white;
-    text-decoration: none;
     border-radius: 8px;
+    text-decoration: none;
+    font-size: 18px;
     font-weight: bold;
+    text-align: center;
 }
 
-.nav a:hover {
+.btn:hover {
     background: #004bcc;
 }
 
+.home-right {
+    width: 550px;
+}
+
+/* Card around upcoming appointments table */
+.table-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 14px rgba(0,0,0,0.1);
+}
+
 /* ============================
-   TABLES
+   TABLE STYLING
 ============================ */
+
 table {
-    width: 80%;
-    margin: 40px auto;
+    width: 100%;
     border-collapse: collapse;
     background: white;
-    box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
 }
 
 th, td {
@@ -71,18 +109,21 @@ th, td {
 th {
     background: #0066ff;
     color: white;
+    font-size: 16px;
 }
 
-/* Edit/Delete buttons */
+/* Edit/Delete Buttons */
 .action-links a {
     margin: 0 8px;
     font-weight: bold;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .edit {
     color: #008800;
 }
+
 .edit:hover {
     text-decoration: underline;
 }
@@ -90,13 +131,15 @@ th {
 .delete {
     color: #cc0000;
 }
+
 .delete:hover {
     text-decoration: underline;
 }
 
 /* ============================
-   FORM CARDS
+   LOGIN / REGISTER / FORMS
 ============================ */
+
 .container {
     background: white;
     padding: 30px;
@@ -146,29 +189,33 @@ button:hover {
 }
 
 /* ============================
-   PROFILE IMAGES
+   NAVIGATION BUTTONS
 ============================ */
-.avatar-small {
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    display: block;
-    margin: 15px auto;
-    border: 2px solid #0066ff;
+
+.nav {
+    text-align: center;
+    margin-top: 20px;
 }
 
-.profile-img {
-    width: 180px;
-    height: 180px;
-    border-radius: 10px;
-    display: block;
-    margin: 20px auto;
-    border: 2px solid #0066ff;
+.nav a {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 12px 20px;
+    background: #0066ff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.nav a:hover {
+    background: #004bcc;
 }
 
 /* ============================
    BACK LINKS
 ============================ */
+
 body > a {
     display: block;
     text-align: center;
@@ -180,4 +227,65 @@ body > a {
 
 body > a:hover {
     text-decoration: underline;
+}
+
+/* ============================
+   PROFILE IMAGE (small avatar)
+============================ */
+
+.avatar-small {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 10px auto;
+}
+
+/* ============================
+   OAUTH BUTTONS — RESTORED BLOCK STYLE
+============================ */
+
+.oauth-btn {
+    display: block;              /* makes full-width buttons */
+    width: 100%;                 /* takes full container width */
+    text-align: center;          /* centers text */
+    
+    padding: 16px 0;             /* restores tall button padding */
+    margin: 12px 0;              /* spacing between buttons */
+
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+
+    transition: 0.2s ease-in-out;
+}
+
+/* Google */
+.oauth-btn.google {
+    background: #ffffff;
+    border: 2px solid #ddd;
+    color: #333;
+}
+.oauth-btn.google:hover {
+    background: #f0f0f0;
+}
+
+/* GitHub */
+.oauth-btn.github {
+    background: #000;
+    color: white;
+}
+.oauth-btn.github:hover {
+    background: #222;
+}
+
+/* Discord */
+.oauth-btn.discord {
+    background: #5865F2;
+    color: white;
+}
+.oauth-btn.discord:hover {
+    background: #4752c4;
 }
