@@ -6,6 +6,7 @@
 </head>
 <body>
 
+    <!-- Show profile image ONLY when logged in -->
     <% if (user) { %>
         <img src="/profile/image" class="avatar-small" alt="Profile Image">
     <% } %>
@@ -15,6 +16,7 @@
     <h1>Healthcare Appointment System</h1>
 
     <div class="nav">
+
         <a href="/schedule">Schedule Appointment</a>
         <a href="/calendar">View Calendar</a>
 
@@ -24,6 +26,7 @@
             <a href="/profile">Profile</a>
             <a href="/logout">Logout</a>
         <% } %>
+
     </div>
 
     <h2>Upcoming Appointments</h2>
@@ -41,15 +44,15 @@
         <% } %>
 
         <% appts.forEach(a => { %>
-            <tr>
-                <td><%= a.patient %></td>
-                <td><%= a.doctor %></td>
-                <td><%= a.datetime %></td>
-                <td class="action-links">
-                    <a href="/edit/<%= a.id %>" class="edit">Edit</a>
-                    <a href="/delete/<%= a.id %>" class="delete">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <td><%= a.patient %></td>
+            <td><%= a.doctor %></td>
+            <td><%= a.datetime %></td>
+            <td class="action-links">
+                <a href="/edit/<%= a.id %>" class="edit">Edit</a>
+                <a href="/delete/<%= a.id %>" class="delete">Delete</a>
+            </td>
+        </tr>
         <% }) %>
     </table>
 
